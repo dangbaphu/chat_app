@@ -14,13 +14,13 @@ class SplashPageState extends State<SplashPage> {
   }
 
   _redirectPageByAuthenticate() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token');
-
-    if (token != null) {
-      await Navigator.of(context).pushNamed('/users');
-    }
-    await Navigator.of(context).pushNamed('/login');
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.getString('token');
+    //
+    // if (token != null) {
+    //   await Navigator.of(context).pushNamed('/users');
+    // }
+    await Navigator.of(context).pushNamedAndRemoveUntil('/register', (Route<dynamic> route) => false);
   }
 
   @override
