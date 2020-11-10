@@ -1,19 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:chat_app/models/chat_message.dart';
-import 'package:chat_app/models/chat_room_info.dart';
-import 'package:chat_app/models/user.dart';
+import 'dart:async';
+// import 'package:chat_app/models/chat_message.dart';
+// import 'package:chat_app/models/chat_room_info.dart';
+// import 'package:chat_app/models/user.dart';
 
-abstract class RepositoryService {
-  Future<DocumentSnapshot> getChatRoom(String title);
-}
-
-class RepositoryServiceImpl implements RepositoryService {
+class RepositoryService {
   @override
 
   final Firestore _firestore = Firestore.instance;
-  Future<DocumentSnapshot> getChatRoom(String title) async {
-    return await _firestore.collection('chat_rooms').document(title).get();
+  Stream<QuerySnapshot> getChatRoomSnapshot() {
+    return _firestore.collection('chat_rooms').snapshots();
   }
+
   // Future<User> getUser(String id) async {
   //   var doc = await _firestore.collection('users').document(id).get();
   //

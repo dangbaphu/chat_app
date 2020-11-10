@@ -1,13 +1,28 @@
+import 'package:chat_app/blocs/list_room/list_room_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_bloc.dart';
+import 'package:chat_app/blocs/list_room/list_room_state.dart';
+import 'package:chat_app/services/list_rooms_service.dart';
 
-class ListRoomScreen extends StatelessWidget {
+class ListRoomScreen extends StatefulWidget {
+  @override
+  _ListRoomState createState() => _ListRoomState();
+}
 
+class _ListRoomState extends State<ListRoomScreen> {
+  ListRoomBloc listRoomBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    listRoomBloc=ListRoomBloc(repository: ListRoomsService());
+    listRoomBloc.add(ListRoomStart());
+  }
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      builder: (BuildContext context) => ListRoomBloc,
+      builder: (BuildContext context) => listRoomBloc,
       child: Scaffold(
         backgroundColor: Color(0xfffcf3f4),
         appBar: AppBar(
@@ -31,19 +46,19 @@ class ListRoomScreen extends StatelessWidget {
           alignment: Alignment(1, 0.85),
           child: FloatingActionButton(
             onPressed: () {
-              // _showDialog(context);
+              listRoomBloc.add(ListRoomStart());
             },
             child: Container(
               width: 60,
               height: 60,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                      colors: [Color(0xffffae88), Color(0xff8f93ea)])),
               child: Icon(
                 Icons.add,
                 color: Colors.white,
               ),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                      colors: [Color(0xffffae88), Color(0xff8f93ea)])),
             ),
           ),
         ),
