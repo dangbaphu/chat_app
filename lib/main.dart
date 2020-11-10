@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chat_app/screens/splash_page.dart';
+import 'package:chat_app/screens/list_room/list_room_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      home: SplashPage(),
+      home: ListRoomScreen(),
       routes: {
       },
     );
