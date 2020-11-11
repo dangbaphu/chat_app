@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:open_chat/blocs/chat_list_bloc/chat_list_bloc.dart';
-import 'package:open_chat/blocs/home_bloc/home_bloc.dart';
-import 'package:open_chat/models/user.dart';
-import 'package:open_chat/screens/profile/profile_screen.dart';
+import 'package:chat_app/blocs/home_bloc/home_bloc.dart';
+import 'package:chat_app/models/user.dart';
+import 'package:chat_app/screens/profile/profile_screen.dart';
 
-import 'chat_list/chat_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final User user;
@@ -73,9 +71,6 @@ class HomeScreen extends StatelessWidget {
               ProfileScreen(
                 user: user,
               ),
-              BlocProvider(
-                  create: (context) => ChatListBloc(user: user)..add(ChatListStart()),
-                  child: ChatListScreen(user: user)),
             ],
           ),
         );

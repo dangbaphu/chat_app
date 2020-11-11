@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xfff2cbd0), Color(0xfff4ced9)],
+                colors: [Color(0xff689f38), Color(0xff9ccc65)],
               )),
           child: SingleChildScrollView(
             child: Stack(

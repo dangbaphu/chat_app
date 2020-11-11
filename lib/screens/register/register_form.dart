@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:open_chat/blocs/auth_bloc/auth_bloc.dart';
-import 'package:open_chat/blocs/register_bloc/register_bloc.dart';
-import 'package:open_chat/widgets/gradient_button.dart';
+import 'package:chat_app/blocs/auth_bloc/auth_bloc.dart';
+import 'package:chat_app/blocs/register_bloc/register_bloc.dart';
+import 'package:chat_app/widgets/gradient_button.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -46,7 +46,7 @@ class _LoginFormState extends State<RegisterForm> {
                     Icon(Icons.error),
                   ],
                 ),
-                backgroundColor: Color(0xffffae88),
+                backgroundColor: Color(0xff689f38),
               ),
             );
         }
@@ -65,7 +65,7 @@ class _LoginFormState extends State<RegisterForm> {
                     )
                   ],
                 ),
-                backgroundColor: Color(0xffffae88),
+                backgroundColor: Color(0xff689f38),
               ),
             );
         }

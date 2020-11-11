@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:open_chat/models/chat_message.dart';
-import 'package:open_chat/models/chat_room_info.dart';
-import 'package:open_chat/models/user.dart';
+import 'package:chat_app/models/chat_room_info.dart';
+import 'package:chat_app/models/user.dart';
 
 class RepositoryService {
   final Firestore _firestore = Firestore.instance;
@@ -69,33 +68,5 @@ class RepositoryService {
         .collection('chat_rooms')
         .where('title', whereIn: chatTitles)
         .snapshots();
-  }
-
-  Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
-    var reference = _firestore
-        .collection('chat_rooms')
-        .document(title)
-        .collection('messages')
-        .document(chatMessage.time);
-
-    return _firestore.runTransaction((transaction) async {
-      await transaction.set(reference, {
-        'message': chatMessage.message,
-        'time': chatMessage.time,
-        'senderId': chatMessage.senderId,
-      });
-    });
-  }
-
-  Future<void> setChatRoomLastMessage(
-      String title, ChatMessage chatMessage) async {
-    var reference = _firestore.collection('chat_rooms').document(title);
-
-    return _firestore.runTransaction((transaction) async {
-      await transaction.update(reference, {
-        'lastMessage': chatMessage.message,
-        'lastModified': chatMessage.time,
-      });
-    });
   }
 }

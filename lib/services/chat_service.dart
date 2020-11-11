@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:open_chat/locator.dart';
-import 'package:open_chat/models/chat_message.dart';
-import 'package:open_chat/models/chat_room_info.dart';
-import 'package:open_chat/services/repository_service.dart';
+import 'package:chat_app/locator.dart';
+import 'package:chat_app/models/chat_room_info.dart';
+import 'package:chat_app/services/repository_service.dart';
 
 class ChatService {
   RepositoryService _repositoryService = locator<RepositoryService>();
@@ -59,31 +58,4 @@ class ChatService {
       }
     }
   );
-
-  Stream<List<ChatMessage>> getChatMessages(String title) {
-    return _repositoryService.getChatMessages(title).transform(documentToChatMessagesTransformer);
-  }
-
-  StreamTransformer documentToChatMessagesTransformer = StreamTransformer<QuerySnapshot, List<ChatMessage>>.fromHandlers(
-      handleData: (QuerySnapshot snapShot, EventSink<List<ChatMessage>> sink) {
-        List<ChatMessage> result = new List<ChatMessage>();
-        snapShot.documents.forEach((doc) {
-          result.add(ChatMessage(
-            message: doc['message'],
-            senderId: doc['senderId'],
-            time: doc['time']
-          ));
-        });
-        sink.add(result);
-      }
-  );
-
-  Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
-    return await _repositoryService.sendChatMessage(title, chatMessage);
-  }
-
-  Future<void> setChatRoomLastMessage(String title, ChatMessage chatMessage) async {
-    return await _repositoryService.setChatRoomLastMessage(title, chatMessage);
-  }
-
 }

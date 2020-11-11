@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:chat_app/screens/splash_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/auth_bloc/auth_bloc.dart';
-//import 'package:chat_app/blocs/home_bloc/home_bloc.dart';
+import 'package:chat_app/blocs/home_bloc/home_bloc.dart';
+import 'package:chat_app/locator.dart';
+import 'package:chat_app/screens/home_screen.dart';
+import 'package:chat_app/screens/login/login_screen.dart';
 
 import 'blocs/simple_bloc_observer.dart';
 
 void main() {
-  runApp(MyApp());
+  Bloc.observer = SimpleBlocObserver();
+  setupLocator();
+  runApp(
+    BlocProvider(
+      create: (context) => AuthBloc()..add(AuthStarted()),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
-      // home: SplashPage(),
-      // routes: {
-      // },
       debugShowCheckedModeBanner: false,
-      title: 'Open Chat',
+      title: 'Chat app',
       theme: ThemeData(
-          primaryColor: Color(0xfffae7e9),
-          accentColor: Color(0xfff2cbd0),
+          primaryColor: Color(0xff9ccc65),
+          accentColor: Color(0xff689f38),
           appBarTheme: AppBarTheme(
             elevation: 0.0,
             color: Colors.transparent,
@@ -30,7 +36,8 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
-          if (state is AuthFailure) {
+          if (state is AuthFailure
+            || state is AuthInitial) {
             return LoginScreen();
           }
 
@@ -42,8 +49,18 @@ class MyApp extends StatelessWidget {
               ),
             );
           }
+
+          return Scaffold(
+            appBar: AppBar(),
+            body: Container(
+              child: Center(
+                child: Text('Loading'),
+              ),
+            ),
+          );
         },
       ),
     );
   }
 }
+
