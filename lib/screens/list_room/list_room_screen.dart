@@ -61,19 +61,21 @@ class _ListRoomState extends State<ListRoomScreen> {
         ),
       ),
       body:
-           BlocBuilder<ListRoomBloc, ListRoomState>(
-             builder: (context, state) {
-               if (state is ListRoomInitial) {
-                 return buildLoading();
-               } else if (state is ListRoomLoading) {
-                 return buildLoading();
-               } else if (state is ListRoomLoaded) {
-                 return buildListRooms(state.listRooms);
-               } else if (state is ListRoomError) {
-                 return buildErrorUi(state.message);
-               }
+           Container(
+             child: BlocBuilder<ListRoomBloc, ListRoomState>(
+               builder: (context, state) {
+                 if (state is ListRoomInitial) {
+                   return buildLoading();
+                 } else if (state is ListRoomLoading) {
+                   return buildLoading();
+                 } else if (state is ListRoomLoadSuccess) {
+                   return buildListRooms(state.listRooms);
+                 } else if (state is ListRoomLoadError) {
+                   return buildErrorUi(state.message);
+                 }
 
-             }
+               }
+             ),
            ),
     );
   }
@@ -98,12 +100,26 @@ class _ListRoomState extends State<ListRoomScreen> {
   Widget buildListRooms(List<ChatRoomInfo> listRooms) {
     return Container(
       child: ListView.builder(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
           itemCount: listRooms.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              leading: Image.network(listRooms[index].imgUrl),
-              title: Text('${listRooms[index].title}'),
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed('/chatroom');
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(
+                        listRooms[index].imgUrl,
+                      ),
+                    ),
+                    title: Text('${listRooms[index].title}'),
+                  ),
+                ),
+              ),
             );
           }),
     );

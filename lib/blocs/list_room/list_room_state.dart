@@ -1,4 +1,3 @@
-
 import 'package:chat_app/models/chat_room_info.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -17,19 +16,19 @@ class ListRoomLoading extends ListRoomState {
   List<Object> get props => [];
 }
 
-class ListRoomLoaded extends ListRoomState {
+class ListRoomLoadSuccess extends ListRoomState {
   List<ChatRoomInfo> listRooms;
 
-  ListRoomLoaded({@required this.listRooms});
+  ListRoomLoadSuccess({@required this.listRooms});
 
   @override
   List<Object> get props => [listRooms];
 }
 
-class ListRoomError extends ListRoomState {
+class ListRoomLoadError extends ListRoomState {
   String message;
 
-  ListRoomError({@required this.message});
+  ListRoomLoadError({@required this.message});
 
   @override
   List<Object> get props => [];
