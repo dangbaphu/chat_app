@@ -1,3 +1,4 @@
+import 'package:chat_app/models/chat_room_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 // import 'package:chat_app/models/chat_message.dart';
@@ -11,7 +12,12 @@ class RepositoryService {
   Stream<QuerySnapshot> getChatRoomSnapshot() {
     return _firestore.collection('chat_rooms').snapshots();
   }
-
+  Future<void> setChatRoom(ChatRoomInfo chatRoomInfo) async {
+    return await _firestore
+        .collection('chat_rooms')
+        .document(chatRoomInfo.title)
+        .setData(chatRoomInfo.toJson());
+  }
   // Future<User> getUser(String id) async {
   //   var doc = await _firestore.collection('users').document(id).get();
   //
@@ -35,12 +41,7 @@ class RepositoryService {
   //   });
   // }
   //
-  // Future<void> setChatRoom(ChatRoomInfo chatRoomInfo) async {
-  //   return await _firestore
-  //       .collection('chat_rooms')
-  //       .document(chatRoomInfo.title)
-  //       .setData(chatRoomInfo.toJson());
-  // }
+
   //
   // Future<DocumentSnapshot> getChatRoom(String title) async {
   //   return await _firestore.collection('chat_rooms').document(title).get();

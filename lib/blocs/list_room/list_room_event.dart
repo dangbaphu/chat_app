@@ -17,10 +17,10 @@ class ListRoomLoad extends ListRoomEvent {
   List<Object> get props => [listRooms];
 }
 
-class ListRoomAdd extends ListRoomEvent {
+class AddChatRoom extends ListRoomEvent {
   final String title;
 
-  ListRoomAdd({this.title});
+  AddChatRoom({this.title});
 
   @override
   List<Object> get props => [title];

@@ -34,3 +34,13 @@ class ListRoomError extends ListRoomState {
   @override
   List<Object> get props => [];
 }
+
+class ChatRoomAdding extends ListRoomState {
+  @override
+  List<Object> get props => [];
+}
+
+class ChatRoomAddSucecss extends ListRoomState {
+  @override
+  List<Object> get props => [];
+}

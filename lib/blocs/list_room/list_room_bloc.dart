@@ -8,38 +8,31 @@ import 'dart:async';
 
 class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
 
-  ListRoomsService repository;
+  ListRoomBloc() : super(ListRoomInitial());
 
-  ListRoomBloc({@required this.repository});
   StreamSubscription listRooms;
-
-
-  @override
-  // TODO: implement initialState
-  ListRoomState get initialState => ListRoomInitial();
 
   @override
   Stream<ListRoomState> mapEventToState(ListRoomEvent event) async* {
     if (event is ListRoomStart) {
       yield ListRoomLoading();
       listRooms?.cancel();
-      listRooms = repository.getChatRooms().listen((rooms) {
-        print(rooms);
-
-        if (rooms.length == 0) {
-          add(ListRoomLoad(listRooms: []));
-        } else {
-
+      listRooms = listRoomsService.getChatRooms().listen((rooms) {
           add(ListRoomLoad(listRooms: rooms));
-        }
       });
     } else if (event is ListRoomLoad) {
-      print(event.listRooms);
-      yield* mapListRoomToState(event.listRooms);
+      yield* _mapListRoomToState(event.listRooms);
+    } else if (event is AddChatRoom) {
+      yield* _mapChatListAddToState(event.title);
+
     }
   }
 
-  Stream<ListRoomState> mapListRoomToState(List<ChatRoomInfo> rooms) async* {
+  Stream<ListRoomState> _mapListRoomToState(List<ChatRoomInfo> rooms) async* {
     yield ListRoomLoaded(listRooms: rooms);
+  }
+  Stream<ListRoomState> _mapChatListAddToState(String title) async* {
+    await listRoomsService.addChatList(title);
+    yield ChatRoomAddSucecss();
   }
 }
