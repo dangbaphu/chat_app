@@ -37,8 +37,38 @@ class MyApp extends StatelessWidget {
             color: Colors.transparent,
           )
       ),
+      initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (context) {
+              return BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthFailure
+                      || state is AuthInitial) {
+                    return LoginScreen();
+                  }
+
+                  if (state is AuthSuccess) {
+                    return BlocProvider(
+                      create: (context) => HomeBloc(),
+                      child: HomeScreen(
+                        user: state.user,
+                      ),
+                    );
+                  }
+
+                  return Scaffold(
+                    appBar: AppBar(),
+                    body: Container(
+                      child: Center(
+                        child: Text('Loading'),
+                      ),
+                    ),
+                  );
+                },
+              );
+            });
           case '/list':
             return MaterialPageRoute(
                 builder: (context) => BlocProvider<ListRoomBloc>(
@@ -55,32 +85,6 @@ class MyApp extends StatelessWidget {
             });
         }
       },
-      home: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
-          if (state is AuthFailure
-            || state is AuthInitial) {
-            return LoginScreen();
-          }
-
-          if (state is AuthSuccess) {
-            return BlocProvider(
-              create: (context) => HomeBloc(),
-              child: HomeScreen(
-                user: state.user,
-              ),
-            );
-          }
-
-          return Scaffold(
-            appBar: AppBar(),
-            body: Container(
-              child: Center(
-                child: Text('Loading'),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }
