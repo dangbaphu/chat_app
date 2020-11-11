@@ -98,6 +98,7 @@ class _ListRoomState extends State<ListRoomScreen> {
   Widget buildListRooms(List<ChatRoomInfo> listRooms) {
     return Container(
       child: ListView.builder(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
           itemCount: listRooms.length,
           itemBuilder: (context, index) {
             return ListTile(

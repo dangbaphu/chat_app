@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/list_room/list_room_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/home_bloc/home_bloc.dart';
@@ -59,13 +60,11 @@ class HomeScreen extends StatelessWidget {
           body: PageView(
             physics: NeverScrollableScrollPhysics(),
             controller: _pageController,
-            onPageChanged: (idx) {
-              Navigator.pushNamed(context, '/list');
-            },
             children: <Widget>[
               ProfileScreen(
                 user: user,
               ),
+              ListRoomScreen()
             ],
           ),
         );

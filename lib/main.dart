@@ -10,6 +10,7 @@ import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/login/login_screen.dart';
 
 import 'blocs/simple_bloc_observer.dart';
+import 'screens/chat_room/chat_room_screen.dart';
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
@@ -50,14 +51,21 @@ class MyApp extends StatelessWidget {
                   }
 
                   if (state is AuthSuccess) {
-                    return BlocProvider(
-                      create: (context) => HomeBloc(),
+                    return MultiBlocProvider(
+                        providers: [
+                          BlocProvider<HomeBloc>(
+                            create: (context) => HomeBloc(),
+                          ),
+                          BlocProvider<ListRoomBloc>(
+                            create: (BuildContext context) => ListRoomBloc(),
+                          ),
+                        ],
                       child: HomeScreen(
                         user: state.user,
                       ),
+
                     );
                   }
-
                   return Scaffold(
                     appBar: AppBar(),
                     body: Container(
@@ -69,12 +77,42 @@ class MyApp extends StatelessWidget {
                 },
               );
             });
-          case '/list':
-            return MaterialPageRoute(
-                builder: (context) => BlocProvider<ListRoomBloc>(
-                      create: (context) => ListRoomBloc(),
-                      child: ListRoomScreen(),
-                    ));
+          case '/chatroom':
+            return MaterialPageRoute(builder: (context) {
+              return BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthFailure
+                      || state is AuthInitial) {
+                    return LoginScreen();
+                  }
+
+                  if (state is AuthSuccess) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<HomeBloc>(
+                          create: (context) => HomeBloc(),
+                        ),
+                        BlocProvider<ListRoomBloc>(
+                          create: (BuildContext context) => ListRoomBloc(),
+                        ),
+                      ],
+                      child: ChatRoomScreen(
+                        user: state.user,
+                      ),
+
+                    );
+                  }
+                  return Scaffold(
+                    appBar: AppBar(),
+                    body: Container(
+                      child: Center(
+                        child: Text('Loading'),
+                      ),
+                    ),
+                  );
+                },
+              );
+            });
           default:
             return MaterialPageRoute(builder: (context) {
               return Scaffold(
