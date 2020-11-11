@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:chat_app/locator.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:chat_app/services/repository_service.dart';
+import 'package:path/path.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;
@@ -47,6 +50,30 @@ class AuthService {
     }
 
     return user;
+  }
+
+  Future<String> uploadFile(File filePath) async {
+    String fileName = basename(filePath.path);
+    StorageReference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(filePath);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    var url = Uri.parse(await taskSnapshot.ref.getDownloadURL() as String);
+    return url.toString();
+  }
+
+  Future updateProfileUser(String name, String imgUrl) async {
+    var firebaseUser = await _firebaseAuth.currentUser();
+    var user = await _repositoryService.getUser(firebaseUser.uid);
+    if (user != null) {
+      user = User(
+        id: firebaseUser.uid,
+        email: firebaseUser.email,
+        name: name,
+        imgUrl: imgUrl ?? user.imgUrl,
+      );
+      _repositoryService.registerUser(user);
+    }
   }
 
 }
