@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 // import 'package:chat_app/models/chat_message.dart';
 // import 'package:chat_app/models/chat_room_info.dart';
+import 'package:chat_app/models/chat_room_info.dart';
 import 'package:chat_app/models/user.dart';
 
 class RepositoryService {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:open_chat/blocs/register_bloc/register_bloc.dart';
-import 'package:open_chat/screens/register/register_form.dart';
-import 'package:open_chat/widgets/curved_widget.dart';
+import 'package:chat_app/blocs/register_bloc/register_bloc.dart';
+import 'package:chat_app/screens/register/register_form.dart';
+import 'package:chat_app/widgets/curved_widget.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -24,7 +24,7 @@ class RegisterScreen extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xfff2cbd0), Color(0xfff4ced9)],
+              colors: [Color(0xff689f38), Color(0xff9ccc65)],
             ),
           ),
           child: SingleChildScrollView(
