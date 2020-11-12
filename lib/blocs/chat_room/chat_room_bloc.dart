@@ -19,15 +19,19 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
       yield ChatRoomLoading();
       chatService.getChatMessages(event.title).listen((messages) {
         chatService.getMessagesAvatar().listen((avatars) {
-          print(messages[0]);
+          print(avatars.length);
+
           for(var i = 0; i < messages.length; i++ ) {
             for (var j = 0; j < avatars.length; j++) {
               if (messages[i].senderId == avatars[j].id) {
                 messages[i].imgUrl = avatars[j].imgUrl;
-                continue;;
+                continue;
               }
             }
           }
+          // avatars.forEach((element) {
+          //   // print(element.imgUrl+ '    ' + element.id);
+          // });
           add(ReceiveMessage(messages: messages));
         });
 
