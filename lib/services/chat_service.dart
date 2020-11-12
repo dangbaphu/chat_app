@@ -69,9 +69,6 @@ class ChatService {
               id: doc['id'],
               imgUrl: doc['imgUrl']
             ));
-            result.add(MessageAvatar(
-                id: doc['id'],
-            ));
           });
           sink.add(result);
         }
