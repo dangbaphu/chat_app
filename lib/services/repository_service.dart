@@ -52,6 +52,12 @@ class RepositoryService {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getMessagesAvatar() {
+    return _firestore
+        .collection('users')
+        .snapshots();
+  }
+
   Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
     var reference = _firestore
         .collection('chat_rooms')

@@ -121,7 +121,7 @@ class _ListRoomState extends State<ListRoomScreen> {
                 child: InkWell(
                   child: ListTile(
                     leading: CircleAvatar(
-                      radius: 40,
+                      radius: 28,
                       backgroundImage: NetworkImage(
                         listRooms[index].imgUrl,
                       ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_app/models/chat_message.dart';
 import 'package:chat_app/services/repository_service.dart';
 // import 'package:meta/meta.dart';
@@ -56,6 +58,25 @@ class ChatService {
         }
     );
 
+    Stream<List<MessageAvatar>> getMessagesAvatar() {
+      return _repository.getMessagesAvatar().transform(documentToMessagesAvatarTransformer);
+    }
+    StreamTransformer documentToMessagesAvatarTransformer = StreamTransformer<QuerySnapshot, List<MessageAvatar>>.fromHandlers(
+        handleData: (QuerySnapshot snapShot, EventSink<List<MessageAvatar>> sink) {
+          List<MessageAvatar> result = new List<MessageAvatar>();
+          snapShot.documents.forEach((doc) {
+            result.add(MessageAvatar(
+              id: doc['id'],
+              imgUrl: doc['imgUrl']
+            ));
+            result.add(MessageAvatar(
+                id: doc['id'],
+            ));
+          });
+          sink.add(result);
+        }
+    );
+
     Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
       return await _repository.sendChatMessage(title, chatMessage);
     }
@@ -64,6 +85,20 @@ class ChatService {
       return await _repository.setChatRoomLastMessage(title, chatMessage);
     }
 
+}
+
+class MessageAvatar {
+  final String id;
+  final String imgUrl;
+
+  MessageAvatar({this.id, this.imgUrl});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': this.id,
+      'imgUrl': this.imgUrl
+    };
+  }
 }
 
 var chatService = ChatService();

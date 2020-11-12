@@ -14,14 +14,14 @@ class ChatMessageItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
-        isMe ? Container() : buildAvatar(user),
+        isMe ? Container() : buildAvatar(chat),
         buildMessage(context, isMe, chat)
       ],
     );
   }
 }
 
-Widget buildAvatar(User user) {
+Widget buildAvatar(ChatMessage chat) {
   return Container(
     child: Padding(
       padding: const EdgeInsets.all(8.0),
@@ -29,7 +29,7 @@ Widget buildAvatar(User user) {
         child: CircleAvatar(
           radius: 18,
           backgroundImage: NetworkImage(
-            user.imgUrl,
+            chat.imgUrl,
           ),
         ),
       ),
