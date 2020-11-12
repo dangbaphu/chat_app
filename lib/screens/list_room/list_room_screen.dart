@@ -1,4 +1,5 @@
 import 'package:chat_app/blocs/list_room/list_room_event.dart';
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_bloc.dart';
@@ -6,6 +7,10 @@ import 'package:chat_app/blocs/list_room/list_room_state.dart';
 import 'package:chat_app/models/chat_room_info.dart';
 
 class ListRoomScreen extends StatefulWidget {
+  final User user;
+
+  const ListRoomScreen({Key key, this.user}) : super(key: key);
+
   @override
   _ListRoomState createState() => _ListRoomState();
 }
@@ -104,7 +109,12 @@ class _ListRoomState extends State<ListRoomScreen> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed('/chatroom');
+                Navigator.pushNamed(
+                    context,
+                    '/chatroom',
+                    arguments: ChatRoomArguments(
+                      widget.user, listRooms[index],
+                    ));
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -193,4 +203,11 @@ class _ListRoomState extends State<ListRoomScreen> {
           );
         });
   }
+}
+
+class ChatRoomArguments {
+  final User user;
+  final ChatRoomInfo chatRoomInfo;
+
+  ChatRoomArguments(this.user, this.chatRoomInfo);
 }

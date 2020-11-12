@@ -15,7 +15,6 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     ChatRoomEvent event,
   ) async* {
     if (event is ChatRoomLoad) {
-      print(event.title);
       yield ChatRoomLoading();
       chatService.getChatMessages(event.title).listen((messages) {
         add(ReceiveMessage(messages: messages));
@@ -23,6 +22,7 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     } else if (event is ReceiveMessage) {
       yield ChatRoomLoadSuccess(messages: event.messages);
     } else if (event is SendMessage) {
+      print(event.chatMessage);
       chatService.sendChatMessage(event.title, event.chatMessage);
       chatService.setChatRoomLastMessage(event.title, event.chatMessage);
     }
