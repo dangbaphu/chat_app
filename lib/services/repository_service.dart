@@ -1,7 +1,7 @@
 import 'package:chat_app/models/chat_room_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
-// import 'package:chat_app/models/chat_message.dart';
+import 'package:chat_app/models/chat_message.dart';
 // import 'package:chat_app/models/chat_room_info.dart';
 import 'package:chat_app/models/chat_room_info.dart';
 import 'package:chat_app/models/user.dart';
@@ -41,7 +41,44 @@ class RepositoryService {
       'imgUrl': user.imgUrl
     });
   }
-  //
+
+  Stream<QuerySnapshot> getChatMessages(String title) {
+    return _firestore
+        .collection('chat_rooms')
+        .document(title)
+        .collection('messages')
+        .orderBy('time', descending: false)
+        .limit(20)
+        .snapshots();
+  }
+
+  Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
+    var reference = _firestore
+        .collection('chat_rooms')
+        .document(title)
+        .collection('messages')
+        .document(chatMessage.time);
+
+    return _firestore.runTransaction((transaction) async {
+      await transaction.set(reference, {
+        'message': chatMessage.message,
+        'time': chatMessage.time,
+        'senderId': chatMessage.senderId,
+      });
+    });
+  }
+
+  Future<void> setChatRoomLastMessage(
+      String title, ChatMessage chatMessage) async {
+    var reference = _firestore.collection('chat_rooms').document(title);
+
+    return _firestore.runTransaction((transaction) async {
+      await transaction.update(reference, {
+        'lastMessage': chatMessage.message,
+        'lastModified': chatMessage.time,
+      });
+    });
+  }
 
   //
   // Future<DocumentSnapshot> getChatRoom(String title) async {

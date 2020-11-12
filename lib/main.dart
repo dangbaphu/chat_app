@@ -1,3 +1,4 @@
+import 'package:chat_app/blocs/chat_room/chat_room_bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/screens/list_room/list_room_screen.dart';
@@ -78,40 +79,16 @@ class MyApp extends StatelessWidget {
               );
             });
           case '/chatroom':
+            final ChatRoomArguments args = settings.arguments;
+
             return MaterialPageRoute(builder: (context) {
-              return BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  if (state is AuthFailure
-                      || state is AuthInitial) {
-                    return LoginScreen();
-                  }
-
-                  if (state is AuthSuccess) {
-                    return MultiBlocProvider(
-                      providers: [
-                        BlocProvider<HomeBloc>(
-                          create: (context) => HomeBloc(),
-                        ),
-                        BlocProvider<ListRoomBloc>(
-                          create: (BuildContext context) => ListRoomBloc(),
-                        ),
-                      ],
-                      child: ChatRoomScreen(
-                        user: state.user,
-                      ),
-
-                    );
-                  }
-                  return Scaffold(
-                    appBar: AppBar(),
-                    body: Container(
-                      child: Center(
-                        child: Text('Loading'),
-                      ),
-                    ),
-                  );
-                },
-              );
+                return BlocProvider<ChatRoomBloc>(
+                  create: (context) => ChatRoomBloc(),
+                  child: ChatRoomScreen(
+                    user: args.user,
+                    chatRoomInfo: args.chatRoomInfo,
+                  ),
+                );
             });
           default:
             return MaterialPageRoute(builder: (context) {

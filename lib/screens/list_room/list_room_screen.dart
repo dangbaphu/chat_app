@@ -1,4 +1,5 @@
 import 'package:chat_app/blocs/list_room/list_room_event.dart';
+import 'package:chat_app/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_bloc.dart';
@@ -6,6 +7,10 @@ import 'package:chat_app/blocs/list_room/list_room_state.dart';
 import 'package:chat_app/models/chat_room_info.dart';
 
 class ListRoomScreen extends StatefulWidget {
+  final User user;
+
+  const ListRoomScreen({Key key, this.user}) : super(key: key);
+
   @override
   _ListRoomState createState() => _ListRoomState();
 }
@@ -61,19 +66,21 @@ class _ListRoomState extends State<ListRoomScreen> {
         ),
       ),
       body:
-           BlocBuilder<ListRoomBloc, ListRoomState>(
-             builder: (context, state) {
-               if (state is ListRoomInitial) {
-                 return buildLoading();
-               } else if (state is ListRoomLoading) {
-                 return buildLoading();
-               } else if (state is ListRoomLoaded) {
-                 return buildListRooms(state.listRooms);
-               } else if (state is ListRoomError) {
-                 return buildErrorUi(state.message);
-               }
+           Container(
+             child: BlocBuilder<ListRoomBloc, ListRoomState>(
+               builder: (context, state) {
+                 if (state is ListRoomInitial) {
+                   return buildLoading();
+                 } else if (state is ListRoomLoading) {
+                   return buildLoading();
+                 } else if (state is ListRoomLoadSuccess) {
+                   return buildListRooms(state.listRooms);
+                 } else if (state is ListRoomLoadError) {
+                   return buildErrorUi(state.message);
+                 }
 
-             }
+               }
+             ),
            ),
     );
   }
@@ -98,12 +105,31 @@ class _ListRoomState extends State<ListRoomScreen> {
   Widget buildListRooms(List<ChatRoomInfo> listRooms) {
     return Container(
       child: ListView.builder(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
           itemCount: listRooms.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              leading: Image.network(listRooms[index].imgUrl),
-              title: Text('${listRooms[index].title}'),
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                    context,
+                    '/chatroom',
+                    arguments: ChatRoomArguments(
+                      widget.user, listRooms[index],
+                    ));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(
+                        listRooms[index].imgUrl,
+                      ),
+                    ),
+                    title: Text('${listRooms[index].title}'),
+                  ),
+                ),
+              ),
             );
           }),
     );
@@ -177,4 +203,11 @@ class _ListRoomState extends State<ListRoomScreen> {
           );
         });
   }
+}
+
+class ChatRoomArguments {
+  final User user;
+  final ChatRoomInfo chatRoomInfo;
+
+  ChatRoomArguments(this.user, this.chatRoomInfo);
 }

@@ -64,7 +64,9 @@ class HomeScreen extends StatelessWidget {
               ProfileScreen(
                 user: user,
               ),
-              ListRoomScreen()
+              ListRoomScreen(
+                user: user,
+              )
             ],
           ),
         );

@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_event.dart';
 import 'package:chat_app/blocs/list_room/list_room_state.dart';
-import 'package:chat_app/services/list_rooms_service.dart';
+import 'package:chat_app/services/chat_service.dart';
 import 'package:chat_app/models/chat_room_info.dart';
 import 'dart:async';
 
@@ -14,7 +14,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
   Stream<ListRoomState> mapEventToState(ListRoomEvent event) async* {
     if (event is ListRoomStart) {
       yield ListRoomLoading();
-      listRoomsService.getChatRooms().listen((rooms) {
+      chatService.getChatRooms().listen((rooms) {
           add(ListRoomLoad(listRooms: rooms));
       });
     } else if (event is ListRoomLoad) {
@@ -26,10 +26,10 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
   }
 
   Stream<ListRoomState> _mapListRoomToState(List<ChatRoomInfo> rooms) async* {
-    yield ListRoomLoaded(listRooms: rooms);
+    yield ListRoomLoadSuccess(listRooms: rooms);
   }
   Stream<ListRoomState> _mapChatListAddToState(String title) async* {
-    await listRoomsService.addChatList(title);
+    await chatService.addChatList(title);
     yield ChatRoomAddSucecss();
   }
 }
