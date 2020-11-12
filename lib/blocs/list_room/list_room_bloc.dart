@@ -26,6 +26,9 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
   }
 
   Stream<ListRoomState> _mapListRoomToState(List<ChatRoomInfo> rooms) async* {
+    rooms.sort((a, b) {
+      return b.lastModified.compareTo(a.lastModified);
+    });
     yield ListRoomLoadSuccess(listRooms: rooms);
   }
   Stream<ListRoomState> _mapChatListAddToState(String title) async* {

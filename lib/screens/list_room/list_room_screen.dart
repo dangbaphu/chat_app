@@ -1,5 +1,6 @@
 import 'package:chat_app/blocs/list_room/list_room_event.dart';
 import 'package:chat_app/models/user.dart';
+import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chat_app/blocs/list_room/list_room_bloc.dart';
@@ -118,17 +119,26 @@ class _ListRoomState extends State<ListRoomScreen> {
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 28,
-                      backgroundImage: NetworkImage(
-                        listRooms[index].imgUrl,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 28,
+                          backgroundImage: NetworkImage(
+                            listRooms[index].imgUrl,
+                          ),
+                        ),
+                        title: Text('${listRooms[index].title}'),
+                        subtitle: Text('${listRooms[index].lastMessage}'),
                       ),
                     ),
-                    title: Text('${listRooms[index].title}'),
-                  ),
-                ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(Constants.millisecondsToFormatString(listRooms[index].lastModified))
+                    ),
+                  ],
+                )
               ),
             );
           }),
