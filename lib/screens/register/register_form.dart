@@ -12,6 +12,7 @@ class RegisterForm extends StatefulWidget {
 class _LoginFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -28,6 +29,7 @@ class _LoginFormState extends State<RegisterForm> {
     _registerBloc = BlocProvider.of<RegisterBloc>(context);
     _emailController.addListener(_onEmailChange);
     _passwordController.addListener(_onPasswordChange);
+    _confirmPasswordController.addListener(_onConfirmPasswordChange);
   }
 
   @override
@@ -42,7 +44,7 @@ class _LoginFormState extends State<RegisterForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Register Failure'),
+                    Text('Email already exists'),
                     Icon(Icons.error),
                   ],
                 ),
@@ -110,6 +112,19 @@ class _LoginFormState extends State<RegisterForm> {
                       return !state.isPasswordValid ? 'Invalid Password' : null;
                     },
                   ),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      labelText: "Confirm Password",
+                    ),
+                    obscureText: true,
+                    autovalidate: true,
+                    autocorrect: false,
+                    validator: (_) {
+                      return !state.isPasswordConfirm ? 'Password don\'t match' : null;
+                    },
+                  ),
                   SizedBox(
                     height: 30,
                   ),
@@ -151,6 +166,12 @@ class _LoginFormState extends State<RegisterForm> {
   void _onPasswordChange() {
     _registerBloc
         .add(RegisterPasswordChanged(password: _passwordController.text));
+  }
+  
+  void _onConfirmPasswordChange() {
+    _registerBloc
+        .add(RegisterConfirmPasswordChanged(
+          password: _passwordController.text, confirmPassword: _confirmPasswordController.text));
   }
 
   void _onFormSubmitted() {
