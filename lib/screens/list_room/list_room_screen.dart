@@ -134,7 +134,7 @@ class _ListRoomState extends State<ListRoomScreen> {
                           ),
                         ),
                         title: Text('${listRooms[index].title}'),
-                        subtitle: Text('${listRooms[index].lastMessage}'),
+                        subtitle: Text('${listRooms[index].lastMessage}', overflow: TextOverflow.ellipsis,),
                       ),
                     ),
                     Padding(

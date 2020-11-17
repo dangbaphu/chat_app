@@ -37,20 +37,12 @@ class HomeScreen extends StatelessWidget {
                     Icons.person,
                     color: Theme.of(context).primaryColor,
                   ),
-                  activeIcon: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
                   title: Container(),
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.chat_bubble,
                     color: Theme.of(context).primaryColor,
-                  ),
-                  activeIcon: Icon(
-                    Icons.chat_bubble,
-                    color: Colors.white,
                   ),
                   title: Container(),
                 )

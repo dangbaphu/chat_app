@@ -62,8 +62,8 @@ class ChatService {
         }
     );
 
-    Stream<List<MessageAvatar>> getMessagesAvatar() {
-      return _repository.getMessagesAvatar().transform(documentToMessagesAvatarTransformer);
+    Stream<List<MessageAvatar>> getMessagesAvatar(senderIds) {
+      return _repository.getMessagesAvatar(senderIds).transform(documentToMessagesAvatarTransformer);
     }
     StreamTransformer documentToMessagesAvatarTransformer = StreamTransformer<QuerySnapshot, List<MessageAvatar>>.fromHandlers(
         handleData: (QuerySnapshot snapShot, EventSink<List<MessageAvatar>> sink) {

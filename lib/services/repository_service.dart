@@ -52,9 +52,10 @@ class RepositoryService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getMessagesAvatar() {
+  Stream<QuerySnapshot> getMessagesAvatar(senderIds) {
     return _firestore
         .collection('users')
+        .where('id', whereIn: senderIds)
         .snapshots();
   }
 
