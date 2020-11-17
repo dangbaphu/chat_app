@@ -197,16 +197,24 @@ class _ListRoomState extends State<ListRoomScreen> {
 
 Widget _showCheckPasswordDialog(BuildContext context, user, room) {
   TextEditingController _checkPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           title: Text('Enter password'),
-          content: TextFormField(
-            controller: _checkPasswordController,
-            decoration: InputDecoration(
-              hintText: 'password',
+          content: Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: _checkPasswordController,
+              decoration: InputDecoration(
+                hintText: 'password',
+              ),
+              obscureText: true,
+              validator: (_) {
+                return room.password !=_checkPasswordController.text ? 'Mật khẩu không đúng' : null;
+              },
             ),
           ),
 
@@ -220,7 +228,7 @@ Widget _showCheckPasswordDialog(BuildContext context, user, room) {
             FlatButton(
               child: Text('Join'),
               onPressed: () {
-                if (room.password == _checkPasswordController.text || room.password == null) {
+                if (_formKey.currentState.validate()) {
                   Navigator.pop(context);
                   Navigator.pushNamed(
                       context,
