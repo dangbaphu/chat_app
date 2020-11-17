@@ -20,7 +20,7 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
     } else if (event is ListRoomLoad) {
       yield* _mapListRoomToState(event.listRooms);
     } else if (event is AddChatRoom) {
-      yield* _mapChatListAddToState(event.title);
+      yield* _mapChatListAddToState(event.userCreate, event.title, event.password);
 
     }
   }
@@ -31,8 +31,8 @@ class ListRoomBloc extends Bloc<ListRoomEvent, ListRoomState> {
     });
     yield ListRoomLoadSuccess(listRooms: rooms);
   }
-  Stream<ListRoomState> _mapChatListAddToState(String title) async* {
-    await chatService.addChatList(title);
+  Stream<ListRoomState> _mapChatListAddToState(String userCreate, String title, String password) async* {
+    await chatService.addChatList(userCreate, title, password);
     yield ChatRoomAddSucecss();
   }
 }

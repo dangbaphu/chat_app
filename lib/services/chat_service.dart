@@ -11,10 +11,12 @@ import 'package:chat_app/locator.dart';
 class ChatService {
     RepositoryService _repository = locator<RepositoryService>();
 
-    Future<void> addChatList(String title) async {
+    Future<void> addChatList(String userCreate, String title, String password) async {
         ChatRoomInfo newRoomInfo = ChatRoomInfo(
+          userCreate: userCreate,
           imgUrl: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80',
           title: title,
+          password: password,
           lastMessage: '',
           lastModified: DateTime.now().millisecondsSinceEpoch.toString(),
         );
@@ -30,7 +32,9 @@ class ChatService {
           List<ChatRoomInfo> result = new List<ChatRoomInfo>();
           snapShot.documents.forEach((doc) {
             result.add(ChatRoomInfo(
+              userCreate: doc['userCreate'],
               title: doc['title'],
+              password: doc['password'],
               imgUrl: doc['imgUrl'],
               lastModified: doc['lastModified'],
               lastMessage: doc['lastMessage'],
