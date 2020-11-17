@@ -53,6 +53,7 @@ class RepositoryService {
   }
 
   Stream<QuerySnapshot> getMessagesAvatar(senderIds) {
+    senderIds = senderIds.length > 0 ? senderIds : [''];
     return _firestore
         .collection('users')
         .where('id', whereIn: senderIds)
