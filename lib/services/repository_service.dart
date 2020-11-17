@@ -52,9 +52,10 @@ class RepositoryService {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getMessagesAvatar() {
+  Stream<QuerySnapshot> getMessagesAvatar(senderIds) {
     return _firestore
         .collection('users')
+        .where('id', whereIn: senderIds)
         .snapshots();
   }
 
@@ -85,68 +86,4 @@ class RepositoryService {
       });
     });
   }
-
-  //
-  // Future<DocumentSnapshot> getChatRoom(String title) async {
-  //   return await _firestore.collection('chat_rooms').document(title).get();
-  // }
-  //
-  // Future<void> updateUserChatList(String id, String title) async {
-  //   var chatListDoc =
-  //   await _firestore.collection('user_chats').document(id).get();
-  //   if (chatListDoc.exists) {
-  //     return chatListDoc.reference.updateData({title: true});
-  //   } else {
-  //     return chatListDoc.reference.setData({title: true});
-  //   }
-  // }
-  //
-  // Stream<DocumentSnapshot> getChatList(String id) {
-  //   return _firestore.collection('user_chats').document(id).snapshots();
-  // }
-  //
-  // Stream<QuerySnapshot> getChatMessages(String title) {
-  //   return _firestore
-  //       .collection('chat_rooms')
-  //       .document(title)
-  //       .collection('messages')
-  //       .orderBy('time', descending: false)
-  //       .limit(20)
-  //       .snapshots();
-  // }
-  //
-  // Stream<QuerySnapshot> getChatRoomInfo(List<String> chatTitles) {
-  //   return _firestore
-  //       .collection('chat_rooms')
-  //       .where('title', whereIn: chatTitles)
-  //       .snapshots();
-  // }
-  //
-  // Future<void> sendChatMessage(String title, ChatMessage chatMessage) async {
-  //   var reference = _firestore
-  //       .collection('chat_rooms')
-  //       .document(title)
-  //       .collection('messages')
-  //       .document(chatMessage.time);
-  //
-  //   return _firestore.runTransaction((transaction) async {
-  //     await transaction.set(reference, {
-  //       'message': chatMessage.message,
-  //       'time': chatMessage.time,
-  //       'senderId': chatMessage.senderId,
-  //     });
-  //   });
-  // }
-  //
-  // Future<void> setChatRoomLastMessage(
-  //     String title, ChatMessage chatMessage) async {
-  //   var reference = _firestore.collection('chat_rooms').document(title);
-  //
-  //   return _firestore.runTransaction((transaction) async {
-  //     await transaction.update(reference, {
-  //       'lastMessage': chatMessage.message,
-  //       'lastModified': chatMessage.time,
-  //     });
-  //   });
-  // }
 }

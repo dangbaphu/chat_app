@@ -18,10 +18,12 @@ class ListRoomLoad extends ListRoomEvent {
 }
 
 class AddChatRoom extends ListRoomEvent {
+  final String userCreate;
   final String title;
+  final String password;
 
-  AddChatRoom({this.title});
+  AddChatRoom({this.userCreate, this.title, this.password});
 
   @override
-  List<Object> get props => [title];
+  List<Object> get props => [userCreate, title, password];
 }

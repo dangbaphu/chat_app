@@ -50,7 +50,7 @@ class _ListRoomState extends State<ListRoomScreen> {
         alignment: Alignment(1, 0.85),
         child: FloatingActionButton(
           onPressed: () {
-            _showDialog(context);
+            _showAddDialog(context);
           },
           child: Container(
             width: 60,
@@ -110,12 +110,16 @@ class _ListRoomState extends State<ListRoomScreen> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(
-                    context,
-                    '/chatroom',
-                    arguments: ChatRoomArguments(
-                      widget.user, listRooms[index],
-                    ));
+                if (listRooms[index].password == null || listRooms[index].password  == '' || widget.user.id == listRooms[index].userCreate) {
+                  Navigator.pushNamed(
+                      context,
+                      '/chatroom',
+                      arguments: ChatRoomArguments(
+                        widget.user, listRooms[index],
+                      ));
+                } else {
+                  _showCheckPasswordDialog(context, widget.user, listRooms[index]);
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -130,7 +134,7 @@ class _ListRoomState extends State<ListRoomScreen> {
                           ),
                         ),
                         title: Text('${listRooms[index].title}'),
-                        subtitle: Text('${listRooms[index].lastMessage}'),
+                        subtitle: Text('${listRooms[index].lastMessage}', overflow: TextOverflow.ellipsis,),
                       ),
                     ),
                     Padding(
@@ -145,55 +149,31 @@ class _ListRoomState extends State<ListRoomScreen> {
     );
   }
 
-  // Widget _chatListLoading(context, state) {
-  //   if (state is ChatListLoadSuccess) {
-  //     return Expanded(
-  //       child: ListView.builder(
-  //         padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
-  //         itemBuilder: (context, index) {
-  //           return GestureDetector(
-  //             onTap: () {
-  //               Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-  //                 return BlocProvider(
-  //                   create: (_) => ChatRoomBloc(user: user, title: state.chatList[index].title)..add(ChatRoomLoad()),
-  //                   child: ChatRoomScreen(
-  //                     user: user,
-  //                     chatRoomInfo: state.chatList[index],
-  //                   ),
-  //                 );
-  //               }));
-  //             },
-  //             child: Padding(
-  //               padding: const EdgeInsets.only(bottom: 10),
-  //               child: ChatListItem(
-  //                 chatRoomInfo: state.chatList[index],
-  //               ),
-  //             ),
-  //           );
-  //         },
-  //         itemCount: state.chatList.length,
-  //       ),
-  //     );
-  //   } else {
-  //     return Center(
-  //       child: Text('Loading'),
-  //     );
-  //   }
-  // }
-
-  Widget _showDialog(BuildContext context) {
-    TextEditingController _controller = TextEditingController();
-
+  Widget _showAddDialog(BuildContext context) {
+    TextEditingController _titleController = TextEditingController(text: "phòng chat của ${widget.user.name}");
+    TextEditingController _passwordController = TextEditingController();
     showDialog(
         context: context,
         builder: (_) {
           return AlertDialog(
             title: Text('Add ChatRoom'),
-            content: TextFormField(
-              controller: _controller,
-              decoration: InputDecoration(
-                hintText: 'ChatRoom Title',
-              ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: _titleController,
+                  decoration: InputDecoration(
+                    hintText: 'ChatRoom Title',
+                  ),
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'password',
+                  ),
+                ),
+              ],
             ),
             actions: <Widget>[
               FlatButton(
@@ -205,7 +185,7 @@ class _ListRoomState extends State<ListRoomScreen> {
               FlatButton(
                 child: Text('Done'),
                 onPressed: () {
-                  _listRoomBloc.add(AddChatRoom(title: _controller.text));
+                  _listRoomBloc.add(AddChatRoom(userCreate: widget.user.id, title: _titleController.text, password: _passwordController.text));
                   Navigator.pop(_);
                 },
               )
@@ -213,6 +193,47 @@ class _ListRoomState extends State<ListRoomScreen> {
           );
         });
   }
+}
+
+Widget _showCheckPasswordDialog(BuildContext context, user, room) {
+  TextEditingController _checkPasswordController = TextEditingController();
+
+  showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Enter password'),
+          content: TextFormField(
+            controller: _checkPasswordController,
+            decoration: InputDecoration(
+              hintText: 'password',
+            ),
+          ),
+
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.pop(_);
+              },
+            ),
+            FlatButton(
+              child: Text('Join'),
+              onPressed: () {
+                if (room.password == _checkPasswordController.text || room.password == null) {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                      context,
+                      '/chatroom',
+                      arguments: ChatRoomArguments(
+                        user, room,
+                      ));
+                }
+              },
+            )
+          ],
+        );
+      });
 }
 
 class ChatRoomArguments {

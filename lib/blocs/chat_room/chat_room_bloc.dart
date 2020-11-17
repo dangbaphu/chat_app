@@ -18,9 +18,11 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
 
       yield ChatRoomLoading();
       chatService.getChatMessages(event.title).listen((messages) {
-        chatService.getMessagesAvatar().listen((avatars) {
-          print(avatars.length);
-
+        List<String> senderIds = [];
+        messages.forEach((element) {
+          senderIds.add(element.senderId);
+        });
+        chatService.getMessagesAvatar(senderIds).listen((avatars) {
           for(var i = 0; i < messages.length; i++ ) {
             for (var j = 0; j < avatars.length; j++) {
               if (messages[i].senderId == avatars[j].id) {
@@ -29,9 +31,6 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
               }
             }
           }
-          // avatars.forEach((element) {
-          //   // print(element.imgUrl+ '    ' + element.id);
-          // });
           add(ReceiveMessage(messages: messages));
         });
 
