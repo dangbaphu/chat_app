@@ -1,5 +1,6 @@
 import 'package:chat_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/screens/edit_profile/edit_profile_screen.dart';
+// import 'package:chat_app/screens/edit_profile/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/models/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,27 +24,61 @@ class ProfileScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: new IconButton(icon: new Icon(Icons.edit_sharp),
-                  onPressed: () {
+          ),
+          drawer: Drawer(
+            // Add a ListView to the drawer. This ensures the user can scroll
+            // through the options in the drawer if there isn't enough vertical
+            // space to fit everything.
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Column(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage: NetworkImage(user.imgUrl),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        user.name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xff6a515e),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )
+                ),
+                ListTile(
+                  title: Text('Edit Profile'),
+                  onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) {
                       return EditProfileScreen(user: user);
                     }));
                   },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: new IconButton(icon: new Icon(Icons.logout),
-                  onPressed: () {
+                ListTile(
+                  title: Text('Change Password'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return EditProfileScreen(user: user);
+                    }));
+                  },
+                ),
+                ListTile(
+                  title: Text('Logout'),
+                  onTap: () {
                     context.bloc<AuthBloc>().add(AuthLoggedOut());
                     Navigator.pushReplacementNamed(context, '/');
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           body: Container(
             padding: const EdgeInsets.only(top: 100),
