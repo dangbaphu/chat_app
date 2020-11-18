@@ -62,14 +62,14 @@ class ProfileScreen extends StatelessWidget {
                     }));
                   },
                 ),
-                ListTile(
-                  title: Text('Change Password'),
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return EditProfileScreen(user: user);
-                    }));
-                  },
-                ),
+                // ListTile(
+                //   title: Text('Change Password'),
+                //   onTap: () {
+                //     Navigator.push(context, MaterialPageRoute(builder: (_) {
+                //       return EditProfileScreen(user: user);
+                //     }));
+                //   },
+                // ),
                 ListTile(
                   title: Text('Logout'),
                   onTap: () {
